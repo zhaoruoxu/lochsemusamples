@@ -1,0 +1,2 @@
+LIBRARY EmuDll
+EXPORTS Func

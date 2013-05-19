@@ -1,0 +1,110 @@
+[Project]
+Assembler=masm
+Type=Console App
+Description=misc
+Backup=$P\Bak\
+Group=1
+GroupExpand=1
+Debug=0
+[Files]
+1=EmuTest_MiscAPI.Asm
+2=EmuTest_MiscAPI.Inc
+[MakeFiles]
+0=EmuTest_MiscAPI.rap
+1=EmuTest_MiscAPI.rc
+2=EmuTest_MiscAPI.asm
+3=EmuTest_MiscAPI.obj
+4=EmuTest_MiscAPI.res
+5=EmuTest_MiscAPI.exe
+6=EmuTest_MiscAPI.def
+7=EmuTest_MiscAPI.dll
+8=EmuTest_MiscAPI.txt
+9=EmuTest_MiscAPI.lib
+10=EmuTest_MiscAPI.mak
+11=EmuTest_MiscAPI.hla
+12=EmuTest_MiscAPI.com
+13=EmuTest_MiscAPI.ocx
+14=EmuTest_MiscAPI.idl
+15=EmuTest_MiscAPI.tlb
+16=EmuTest_MiscAPI.sys
+[MakeDef]
+Menu=0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+1=4,O,$B\RC.EXE /v,1
+2=3,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",2
+3=5,O,$B\LINK.EXE /SUBSYSTEM:CONSOLE /RELEASE /VERSION:4.0 /LIBPATH:"$L" /OUT:"$5",3
+4=0,0,,5
+5=rsrc.obj,O,$B\CVTRES.EXE,rsrc.res
+6=*.obj,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",*.asm
+7=0,0,"$E\OllyDbg",5
+11=4,O,$B\RC.EXE /v,1
+12=3,O,$B\ML.EXE /c /coff /Cp /Zi /nologo /I"$I",2
+13=5,O,$B\LINK.EXE /SUBSYSTEM:CONSOLE /DEBUG /VERSION:4.0 /LIBPATH:"$L" /OUT:"$5",3
+14=0,0,,5
+15=rsrc.obj,O,$B\CVTRES.EXE,rsrc.res
+16=*.obj,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",*.asm
+17=0,0,"$E\OllyDbg",5
+[Group]
+Group=Added files,Assembly,Resources,Misc,Modules
+1=2
+2=2
+[Collapse]
+1=
+[Size]
+1=0,0,0,0,583
+[VersionControl]
+Settings=1246
+Milestones=129
+MilestoneEvery=10
+MilestoneEveryCurrent=0
+MilestoneOnBuild=0.0.0.0
+MilestoneOnTime=2
+MilestoneOnDate=0
+MilestoneOnDateWhen=1
+MilestoneOnDateStatus=0
+MilestoneOnDateDate=3
+MilestoneOnDateTimeYear=2011
+MilestoneOnDateTimeMonth=11
+MilestoneOnDateTimeDate=28
+MilestoneOnDateTimeHour=20
+MilestoneOnDateTimeMin=19
+MilestoneOnDateTimeSec=55
+MilestoneOnDateTimeStatus=0
+BackupLocation=D:\Code\Tools\RadASM\Masm\Projects\VCBackups\
+CompressionLevel=0
+DefaultComment=Project $N, $Z, Backup Created On $D At $T.
+ExcludeExt1=\
+ExcludeExt2=\
+ExcludeExt3=\
+ExcludeExt4=\
+FileVerLength=4
+FileVer2Range=0
+FileVer3Range=0
+FileVer4Range=0
+ProductVerLength=4
+ProductVer2Range=0
+ProductVer3Range=0
+ProductVer4Range=0
+[Colref]
+0=00FFFFFF
+1=00FFFFFF
+2=00FFFFFF
+3=00FFFFFF
+4=00FFFFFF
+5=00FFFFFF
+6=00FFFFFF
+7=00FFFFFF
+[PTimer]
+PTimer=42662077
+[BookMark]
+0=
+1=
+2=
+3=
+4=
+5=
+6=
+7=
+8=
+9=
+[BreakPoint]
+0=

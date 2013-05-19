@@ -1,0 +1,110 @@
+[Project]
+Assembler=masm
+Type=Console App
+Description=AnalyzeSwap
+Backup=$P\Bak\
+Group=1
+GroupExpand=1
+Debug=0
+[Files]
+1=AnalyzeSwap.Asm
+2=AnalyzeSwap.Inc
+[MakeFiles]
+0=AnalyzeSwap.rap
+1=AnalyzeSwap.rc
+2=AnalyzeSwap.asm
+3=AnalyzeSwap.obj
+4=AnalyzeSwap.res
+5=AnalyzeSwap.exe
+6=AnalyzeSwap.def
+7=AnalyzeSwap.dll
+8=AnalyzeSwap.txt
+9=AnalyzeSwap.lib
+10=AnalyzeSwap.mak
+11=AnalyzeSwap.hla
+12=AnalyzeSwap.com
+13=AnalyzeSwap.ocx
+14=AnalyzeSwap.idl
+15=AnalyzeSwap.tlb
+16=AnalyzeSwap.sys
+[MakeDef]
+Menu=0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0
+1=4,O,$B\RC.EXE /v,1
+2=3,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",2
+3=5,O,$B\LINK.EXE /SUBSYSTEM:CONSOLE /RELEASE /VERSION:4.0 /LIBPATH:"$L" /OUT:"$5",3
+4=0,0,,5
+5=rsrc.obj,O,$B\CVTRES.EXE,rsrc.res
+6=*.obj,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",*.asm
+7=0,0,"$E\OllyDbg",5
+11=4,O,$B\RC.EXE /v,1
+12=3,O,$B\ML.EXE /c /coff /Cp /Zi /nologo /I"$I",2
+13=5,O,$B\LINK.EXE /SUBSYSTEM:CONSOLE /DEBUG /VERSION:4.0 /LIBPATH:"$L" /OUT:"$5",3
+14=0,0,,5
+15=rsrc.obj,O,$B\CVTRES.EXE,rsrc.res
+16=*.obj,O,$B\ML.EXE /c /coff /Cp /nologo /I"$I",*.asm
+17=0,0,"$E\OllyDbg",5
+[Group]
+Group=Added files,Assembly,Resources,Misc,Modules
+1=2
+2=2
+[VersionControl]
+Settings=1246
+Milestones=129
+MilestoneEvery=10
+MilestoneEveryCurrent=0
+MilestoneOnBuild=0.0.0.0
+MilestoneOnTime=2
+MilestoneOnDate=0
+MilestoneOnDateWhen=1
+MilestoneOnDateStatus=0
+MilestoneOnDateDate=3
+MilestoneOnDateTimeYear=2012
+MilestoneOnDateTimeMonth=3
+MilestoneOnDateTimeDate=15
+MilestoneOnDateTimeHour=19
+MilestoneOnDateTimeMin=20
+MilestoneOnDateTimeSec=27
+MilestoneOnDateTimeStatus=0
+BackupLocation=C:\Code\Tools\RadASM\Masm\Projects\VCBackups\
+CompressionLevel=0
+DefaultComment=Project $N, $Z, Backup Created On $D At $T.
+ExcludeExt1=\
+ExcludeExt2=\
+ExcludeExt3=\
+ExcludeExt4=\
+FileVerLength=4
+FileVer2Range=0
+FileVer3Range=0
+FileVer4Range=0
+ProductVerLength=4
+ProductVer2Range=0
+ProductVer3Range=0
+ProductVer4Range=0
+[Colref]
+0=00FFFFFF
+1=00FFFFFF
+2=00FFFFFF
+3=00FFFFFF
+4=00FFFFFF
+5=00FFFFFF
+6=00FFFFFF
+7=00FFFFFF
+[PTimer]
+PTimer=3085778
+[Collapse]
+1=
+[Size]
+1=0,0,0,0,478
+[BookMark]
+0=
+1=
+2=
+3=
+4=
+5=
+6=
+7=
+8=
+9=
+[BreakPoint]
+0=
