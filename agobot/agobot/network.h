@@ -12,5 +12,7 @@ bool Recv(char *buf, int n, int *bytesRead);
 
 bool SendFormat(const char *szFmt, ...);
 bool SendIrcFormat(const char *szFmt, ...);
+
+bool Select();
  
 #endif // __AGOBOT_NETWORK_H__

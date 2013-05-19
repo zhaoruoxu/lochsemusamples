@@ -18,13 +18,28 @@ int _tmain(int argc, _TCHAR* argv[])
     SendIrcFormat("NICK moxiao");
     SendIrcFormat("USER %s %s bla :%s", "Moxiao", Host, "mxReal");
 
+    SendIrcFormat("JOIN #sdf");
+    SendIrcFormat("MODE #sdf");
+    SendIrcFormat("WHO #sdf");
+
+
     char buf[4096];
 
-    RecvIrc(buf, sizeof(buf));
+    bool running = true;
+    while (running) {
+        if (!Select()) continue;
+        RecvIrc(buf, sizeof(buf));
+        printf("-> %s\n", buf);
 
-    printf("received: %s\n", buf);
+        char *p = strtok(buf, " :");
+        p = strtok(NULL, " :");
+        if (strcmp(p, "315") == 0) {
+            SendIrcFormat("QUIT :Leaving");
+            running = false;
+        }
+    }
 
-    SendIrcFormat("QUIT :Leaving");
+    
 
     CloseConnection();
 

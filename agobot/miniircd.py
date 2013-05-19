@@ -205,15 +205,15 @@ class Client(object):
             self.disconnect("Client quit")
             return
         if self.nickname and self.user:
-            self.reply("001 %s :Hi, welcome to IRC" % self.nickname)
-            self.reply("002 %s :Your host is %s, running version miniircd-%s"
-                       % (self.nickname, server.name, VERSION))
-            self.reply("003 %s :This server was created sometime"
-                       % self.nickname)
-            self.reply("004 %s :%s miniircd-%s o o"
-                       % (self.nickname, server.name, VERSION))
+            #self.reply("001 %s :Hi, welcome to IRC" % self.nickname)
+            #self.reply("002 %s :Your host is %s, running version miniircd-%s"
+            #           % (self.nickname, server.name, VERSION))
+            #self.reply("003 %s :This server was created sometime"
+            #           % self.nickname)
+            #self.reply("004 %s :%s miniircd-%s o o"
+            #           % (self.nickname, server.name, VERSION))
             self.send_lusers()
-            self.send_motd()
+            #self.send_motd()
             self.__handle_command = self.__command_handler
 
     def __command_handler(self, command, arguments):

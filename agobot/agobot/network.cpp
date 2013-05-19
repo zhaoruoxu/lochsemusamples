@@ -124,3 +124,22 @@ bool SendIrcFormat( const char *szFmt, ... )
     strcat(buf, "\r\n");
     return Send(buf, strlen(buf), NULL);
 }
+
+bool Select()
+{
+    timeval tv;
+    tv.tv_usec = 0;
+    tv.tv_sec = 2;
+    fd_set fd;
+    FD_ZERO(&fd);
+    FD_SET(g_connSocket, &fd);
+    int r = select(g_connSocket+1, &fd, NULL, NULL, &tv);
+    if (r == 0) {
+        return false;
+    } else if (FD_ISSET(g_connSocket, &fd)) {
+        return true;
+    } else {
+        printf("select error: %d\n", WSAGetLastError());
+        return false;
+    }
+}
