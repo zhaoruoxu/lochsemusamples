@@ -18,3 +18,5 @@ if __name__ == "__main__":
 	server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)
 	print("Running server at {} port {}".format(HOST, PORT))
 	server.serve_forever()
+
+	
