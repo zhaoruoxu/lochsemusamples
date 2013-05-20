@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "network.h"
 
-static const int    BufLength = 1024;
+static const int    BufLength = 4096;
 
 static SOCKET g_connSocket = INVALID_SOCKET;
 
@@ -68,7 +68,8 @@ bool RecvIrc( char *buf, int n )
     buf[index] = '\0';
     bool receiving = true;
     while (index < n - 1) {
-        if (!Recv(buf + index, 1, NULL)) return false;
+        if (recv(g_connSocket, buf + index, 1, 0) == SOCKET_ERROR) 
+            return false;
         buf[index + 1] = '\0';
         if (buf[index] == '\n') {
             if (buf[index-1] == '\r')

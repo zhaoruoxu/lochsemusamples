@@ -1,48 +1,127 @@
-// agobot.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include "network.h"
-
-#pragma comment(lib, "ws2_32.lib")
+#include "agobot.h"
 
 const char *Host = "localhost";
+const char *Channel = "#agochan";
+const char *Nick = "moxiao";
+const char *User = "mxuser";
+const char *Real = "mxreal";
 
-int _tmain(int argc, _TCHAR* argv[])
+enum AgobotState {
+    STATE_IDLE,
+    STATE_NAMES,
+    STATE_WHO,
+
+};
+
+bool g_running;
+
+inline strp FirstToken(strp buf, strp delim)
+{
+    return strtok(buf, delim);
+}
+
+inline strp NextToken(strp delim)
+{
+    return strtok(NULL, delim);
+}
+
+void Msg_315();
+void Msg_353();
+void Msg_366();
+void Msg_324();
+void Msg_352();
+
+struct CmdHandler {
+    strp cmd;
+    void (*handler)();
+} g_handlers[] = {
+    { "353", Msg_353 },
+    { "315", Msg_315 },
+    { "366", Msg_366 },
+    { "324", Msg_324 },
+    { "352", Msg_352 },
+};
+
+void RunAgobot()
 {
     if (!InitConnection(Host, "6667")) {
         printf("connection failed\n");
-        return EXIT_FAILURE;
+        return;
     }
 
-    SendIrcFormat("NICK moxiao");
-    SendIrcFormat("USER %s %s bla :%s", "Moxiao", Host, "mxReal");
+    SendIrcFormat("NICK %s", Nick);
+    SendIrcFormat("USER %s %s bla :%s", User, Host, Real);
 
-    SendIrcFormat("JOIN #sdf");
-    SendIrcFormat("MODE #sdf");
-    SendIrcFormat("WHO #sdf");
-
+    SendIrcFormat("JOIN %s", Channel);
 
     char buf[4096];
 
-    bool running = true;
-    while (running) {
+    g_running = true;
+    while (g_running) {
         if (!Select()) continue;
         RecvIrc(buf, sizeof(buf));
         printf("-> %s\n", buf);
 
-        char *p = strtok(buf, " :");
-        p = strtok(NULL, " :");
-        if (strcmp(p, "315") == 0) {
-            SendIrcFormat("QUIT :Leaving");
-            running = false;
+        char *p = FirstToken(buf, " ");
+        p = NextToken(" ");
+
+        for (int i = 0; i < _countof(g_handlers); i++) {
+            if (!strcmp(p, g_handlers[i].cmd)) {
+                g_handlers[i].handler();
+            }
         }
     }
 
-    
-
     CloseConnection();
-
-	return 0;
 }
 
+void Msg_315()
+{
+    SendIrcFormat("QUIT :Leaving");
+    g_running = false;
+}
+
+void Msg_353()
+{
+    strp nick = NextToken(" ");
+    strp chanMode = NextToken(" ");
+    strp chan = NextToken(" ");
+
+    printf("Channel members: ");
+    strp member = NextToken(":");
+    member = FirstToken(member, " ");
+    while (member) {
+        printf("%s  ", member);
+        member = NextToken(" ");
+    }
+    printf("\n");
+}
+
+void Msg_366()
+{
+    SendIrcFormat("MODE %s", Channel);
+}
+
+void Msg_324()
+{
+    SendIrcFormat("WHO %s", Channel);
+}
+
+void Msg_352()
+{
+    strp mynick = NextToken(" ");
+    strp chan = NextToken(" ");
+    strp user = NextToken(" ");
+    strp host = NextToken(" ");
+    strp server = NextToken(" ");
+    strp nick = NextToken(" ");
+    strp HG = NextToken(" ");
+
+    strp hopcount = FirstToken(NextToken(":"), " ");
+    strp realname = NextToken(" ");
+
+    printf("Chan=%s, User=%s, Host=%s, Server=%s, Nick=%s, Hop=%s, Real=%s\n",
+        chan, user, host, server, nick, hopcount, realname);
+}

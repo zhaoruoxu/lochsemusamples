@@ -27,15 +27,21 @@
     <ClInclude Include="network.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="agobot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="agobot.cpp">
+    <ClCompile Include="network.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="network.cpp">
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="agobot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
