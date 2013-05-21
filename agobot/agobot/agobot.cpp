@@ -90,8 +90,7 @@ void Msg_353()
     strp chan = NextToken(" ");
 
     printf("Channel members: ");
-    strp member = NextToken(":");
-    member = FirstToken(member, " ");
+    strp member = FirstToken(NextToken(":"), " ");
     while (member) {
         printf("%s  ", member);
         member = NextToken(" ");

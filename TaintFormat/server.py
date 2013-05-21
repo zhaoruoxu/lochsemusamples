@@ -4,7 +4,7 @@ import ctypes
 
 class MyTcpHandler(socketserver.StreamRequestHandler):
 	def getMessage(self):
-		return b'\x0e\x00\x00\x00Prophet rocks!\x23\x22\x21\x20hello world Prophet'
+		return b'\x0e\x00\x00\x00Prophet rocks!\xf3\xf2\xf1\xf0hello world Prophet'
 
 	def handle(self):
 		self.data = self.rfile.readline().strip()

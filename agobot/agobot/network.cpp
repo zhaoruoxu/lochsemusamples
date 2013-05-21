@@ -70,12 +70,11 @@ bool RecvIrc( char *buf, int n )
     while (index < n - 1) {
         if (recv(g_connSocket, buf + index, 1, 0) == SOCKET_ERROR) 
             return false;
-        buf[index + 1] = '\0';
+        
         if (buf[index] == '\n') {
             if (buf[index-1] == '\r')
                 buf[index-1] = '\0';
-            else
-                buf[index] = '\0';
+            buf[index] = '\0';
             break;
         }
         index++;
