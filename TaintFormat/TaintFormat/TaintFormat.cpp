@@ -10,12 +10,30 @@ static const char * ServerAddress = "localhost";
 
 static const int    BufLength = 1024;
 
+typedef unsigned char byte;
+
+byte S[256];
+
 void PrintField(char *buf, int len)
 {
     char strbuf[BufLength];
     ZeroMemory(strbuf, BufLength);
     memcpy(strbuf, buf, len);
     printf("field: %s\n", strbuf);
+}
+
+void KeySchedule(const char *key, int n)
+{
+    for (int i = 0; i < 256; i++)
+        S[i] = i;
+    byte j = 0;
+    for (int i = 0; i < 256; i++) {
+        j += S[i] + (byte) key[i % n];
+        //std::swap(S[i], S[j]);
+        byte t = S[i];
+        S[i] = S[j];
+        S[j] = t;
+    }
 }
 
 void ProcessMessage(char *buf, int len)
@@ -25,6 +43,8 @@ void ProcessMessage(char *buf, int len)
      */
     int l = reinterpret_cast<int *>(buf)[0];
     int dat = reinterpret_cast<int *>(buf + l + 4)[0];
+
+    KeySchedule(buf + l + 4, 4);
 
     char strbuf[BufLength];
     ZeroMemory(strbuf, BufLength);
