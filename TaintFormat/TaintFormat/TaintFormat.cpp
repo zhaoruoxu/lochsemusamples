@@ -12,8 +12,6 @@ static const int    BufLength = 1024;
 
 typedef unsigned char byte;
 
-byte S[256];
-
 void PrintField(char *buf, int len)
 {
     char strbuf[BufLength];
@@ -22,50 +20,57 @@ void PrintField(char *buf, int len)
     printf("field: %s\n", strbuf);
 }
 
-void KeySchedule(const char *key, int n)
+void KeySchedule(byte *S, const char *key, int n)
 {
     for (int i = 0; i < 256; i++)
         S[i] = i;
     byte j = 0;
     for (int i = 0; i < 256; i++) {
         j += S[i] + (byte) key[i % n];
-        //std::swap(S[i], S[j]);
-        byte t = S[i];
-        S[i] = S[j];
-        S[j] = t;
+        std::swap(S[i], S[j]);
+//         byte t = S[i];
+//         S[i] = S[j];
+//         S[j] = t;
     }
 }
 
+byte Gen(byte *S, byte &a, byte &b)
+{
+    a++;
+    b += S[a];
+    std::swap(S[a], S[b]);
+    return S[(S[a] + S[b]) & 0xff];
+}
+
+void RC4Crypt(char *dest, const char *src, int n, const char *key, int keylen)
+{
+    byte S[256];
+    KeySchedule(S, key, keylen);
+
+    byte a = 0, b = 0;
+    for (int i = 0; i < n; i++) {
+        dest[i] = src[i] ^ Gen(S, a, b);
+    }
+}
+
+static const char *Key = "gossip";
 void ProcessMessage(char *buf, int len)
 {
     /*
      * | 32-bit length | variable len | 32-bit fixed | variable len | ( ' ' variable len ) * |
      */
     int l = reinterpret_cast<int *>(buf)[0];
-    int dat = reinterpret_cast<int *>(buf + l + 4)[0];
+    char dec[256];
+    RC4Crypt(dec, buf + 4, l, Key, strlen(Key));
+    dec[l] = 0;
 
-    KeySchedule(buf + l + 4, 4);
+    printf("Message: %s\n", dec);
 
-    char strbuf[BufLength];
-    ZeroMemory(strbuf, BufLength);
-    for (int i = 0; i < l; i++)
-        strbuf[i] = buf[i+4];
-
-    printf("Message: l=%d, dat=%d(%x), str=%s\n", l, dat, dat, strbuf);
-
-    char *p = buf + 4 + l + 4;
-    char *field = p;
-    while (p - buf < len) {
-        if (*p == ' ') {
-            PrintField(field, p - field);
-            field = p + 1;
-        }
-        p++;
+    char *p = strtok(dec, " ");
+    while (p) {
+        printf("# %s\n", p);
+        p = strtok(NULL, " ");
     }
-    if (field - buf < len)
-        PrintField(field, buf + len - field);
-
-    
 }
 
 int _tmain(int argc, _TCHAR* argv[])
