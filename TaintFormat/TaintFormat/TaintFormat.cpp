@@ -75,6 +75,14 @@ void ProcessMessage(char *buf, int len)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+#ifdef _DEBUG
+    int dbgFlags;
+    dbgFlags = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+    dbgFlags |= _CRTDBG_DELAY_FREE_MEM_DF;
+    dbgFlags |= _CRTDBG_LEAK_CHECK_DF;
+    _CrtSetDbgFlag( dbgFlags);
+#endif
+
     // initialize Winsock
     WSADATA wsaData;
     int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
