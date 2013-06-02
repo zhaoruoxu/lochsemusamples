@@ -5,71 +5,35 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
+#include "rc4test.h"
+#include "mega_d.h"
+
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
-
 static const int    BufLength = 1024;
 
 typedef unsigned char byte;
 
-void PrintField(char *buf, int len)
-{
-    char strbuf[BufLength];
-    ZeroMemory(strbuf, BufLength);
-    memcpy(strbuf, buf, len);
-    printf("field: %s\n", strbuf);
-}
+// void PrintField(char *buf, int len)
+// {
+//     char strbuf[BufLength];
+//     ZeroMemory(strbuf, BufLength);
+//     memcpy(strbuf, buf, len);
+//     printf("field: %s\n", strbuf);
+// }
+// 
+const char *Method[] = {
+    "rc4",
+    "mega-d"
+};
+static int Choice = 0;
 
-void KeySchedule(byte *S, const char *key, int n)
-{
-    for (int i = 0; i < 256; i++)
-        S[i] = i;
-    byte j = 0;
-    for (int i = 0; i < 256; i++) {
-        j += S[i] + (byte) key[i % n];
-        std::swap(S[i], S[j]);
-//         byte t = S[i];
-//         S[i] = S[j];
-//         S[j] = t;
-    }
-}
-
-byte Gen(byte *S, byte &a, byte &b)
-{
-    a++;
-    b += S[a];
-    std::swap(S[a], S[b]);
-    return S[(S[a] + S[b]) & 0xff];
-}
-
-void RC4Crypt(char *dest, const char *src, int n, const char *key, int keylen)
-{
-    byte S[256];
-    KeySchedule(S, key, keylen);
-
-    byte a = 0, b = 0;
-    for (int i = 0; i < n; i++) {
-        dest[i] = src[i] ^ Gen(S, a, b);
-    }
-}
-
-static const char *Key = "gossip";
 void ProcessMessage(char *buf, int len)
 {
-    /*
-     * | 32-bit length | variable len | 32-bit fixed | variable len | ( ' ' variable len ) * |
-     */
-    int l = reinterpret_cast<int *>(buf)[0];
-    char dec[256];
-    RC4Crypt(dec, buf + 4, l, Key, strlen(Key));
-    dec[l] = 0;
-
-    printf("Message: %s\n", dec);
-
-    char *p = strtok(dec, " ");
-    while (p) {
-        printf("# %s\n", p);
-        p = strtok(NULL, " ");
+    if (Choice == 0) {
+        RC4Test(buf, len);
+    } else if (Choice == 1) {
+        MegaDTest(buf, len);
     }
 }
 
@@ -82,6 +46,13 @@ int _tmain(int argc, _TCHAR* argv[])
     dbgFlags |= _CRTDBG_LEAK_CHECK_DF;
     _CrtSetDbgFlag( dbgFlags);
 #endif
+
+    if (argc == 1) {
+        printf("Need argument\n");
+        return 0;
+    }
+
+    Choice = _wtoi(argv[1]);
 
     // initialize Winsock
     WSADATA wsaData;
@@ -131,7 +102,7 @@ int _tmain(int argc, _TCHAR* argv[])
         return 1;
     }
 
-    char buf[] = "hello";
+    const char *buf = Method[Choice];
 
     result = send(connectSocket, buf, strlen(buf), 0);
     if (result == SOCKET_ERROR) {

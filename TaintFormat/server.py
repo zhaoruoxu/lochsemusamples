@@ -2,6 +2,7 @@ import socketserver
 from datetime import datetime
 import ctypes
 import struct
+from pyDes import *
 
 def rc4crypt(data, key):
     x = 0
@@ -20,21 +21,37 @@ def rc4crypt(data, key):
     
     return out
 
+def getRC4Message():
+	enc = rc4crypt(b"show me the code", b"gossip")
+	return struct.pack("i", len(enc)) + bytes(enc)
+	
+def getMegaDMessage():
+	data = b"abcdefghijklmnopqrstuvwxyz"
+	key = b"abcdefgh"
+	k = des(key, ECB, pad = b'\0')
+	d = k.encrypt(data)
+	print("encrypted:", d)
+	print("decrypted:", k.decrypt(d))
+	print(len(d))
+	return struct.pack(">H", len(d) // 8) + d
+	
 class MyTcpHandler(socketserver.StreamRequestHandler):
-	def getMessage(self):
-		enc = rc4crypt(b"show me the code", b"gossip")
-		r = struct.pack("i", len(enc)) + bytes(enc)
-		print("Sending:", r)
-		return r
-		#return b'\x0e\x00\x00\x00Prophet rocks!\xf3\xf2\xf1\xf0hello world Prophet'
+	def getMessage(self, method):
+		if method == b"rc4":
+			return getRC4Message()
+		elif method == b"mega-d":
+			return getMegaDMessage()
+		return b"Unknown method"
+		
 
 	def handle(self):
-		self.data = self.rfile.readline().strip()
+		self.method = self.rfile.readline().strip()
 		print("{} {} wrote:".format(datetime.now(), self.client_address[0]))
-		print(self.data)
-		self.wfile.write(self.getMessage())
+		print(self.method)
+		self.wfile.write(self.getMessage(self.method))
 
 if __name__ == "__main__":
+	#getMegaDMessage()
 	ctypes.windll.kernel32.SetConsoleTitleA(b"Server")
 	HOST, PORT = "localhost", 56789
 	server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)

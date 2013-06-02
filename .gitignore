@@ -20,7 +20,6 @@ Thumbs.db
 *.log
 *.sdf
 obj/
-[Bb]in
 [Dd]ebug*/
 *.sbr
 [Rr]elease*/
