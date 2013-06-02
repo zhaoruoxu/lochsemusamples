@@ -21,6 +21,19 @@ def rc4crypt(data, key):
     
     return out
 
+def zeusEncrypt(data):
+	r = []
+	r.append(data[0])
+	for i in range(1, len(data)):
+		r.append(data[i] ^ r[i-1])
+	return bytes(r)
+	
+def getZeusMessage():
+	pt = b"xHello Zeus!!!!!!"
+	r = zeusEncrypt(pt)
+	print(r)
+	return r
+
 def getRC4Message():
 	enc = rc4crypt(b"show me the code", b"gossip")
 	return struct.pack("i", len(enc)) + bytes(enc)
@@ -41,6 +54,8 @@ class MyTcpHandler(socketserver.StreamRequestHandler):
 			return getRC4Message()
 		elif method == b"mega-d":
 			return getMegaDMessage()
+		elif method == b"zeus":
+			return getZeusMessage()
 		return b"Unknown method"
 		
 
@@ -52,6 +67,7 @@ class MyTcpHandler(socketserver.StreamRequestHandler):
 
 if __name__ == "__main__":
 	#getMegaDMessage()
+	#print(getZeusMessage())
 	ctypes.windll.kernel32.SetConsoleTitleA(b"Server")
 	HOST, PORT = "localhost", 56789
 	server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)

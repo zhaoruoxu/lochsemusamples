@@ -7,6 +7,7 @@
 
 #include "rc4test.h"
 #include "mega_d.h"
+#include "zeus.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
@@ -24,7 +25,8 @@ typedef unsigned char byte;
 // 
 const char *Method[] = {
     "rc4",
-    "mega-d"
+    "mega-d",
+    "zeus"
 };
 static int Choice = 0;
 
@@ -34,11 +36,14 @@ void ProcessMessage(char *buf, int len)
         RC4Test(buf, len);
     } else if (Choice == 1) {
         MegaDTest(buf, len);
+    } else if (Choice == 2) {
+        ZeusTest(buf, len);
     }
 }
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+    srand(time(NULL));
 #ifdef _DEBUG
     int dbgFlags;
     dbgFlags = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );

@@ -30,6 +30,12 @@
     <ClInclude Include="mega_d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="zeus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mega_d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zeus.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

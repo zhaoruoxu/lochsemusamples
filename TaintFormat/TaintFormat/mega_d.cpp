@@ -1,8 +1,6 @@
 #include "stdafx.h"
-
+#include "common.h"
 #include <openssl/des.h>
-
-typedef unsigned char byte;
 
 static const char *Key = "abcdefgh";
 
