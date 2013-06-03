@@ -1,0 +1,16 @@
+1   1   1   1    20        20
+RND TTL LOP TYPE SessionID SourceID
+N
+Payload(RC4)
+
+C2 message:
+Payload:
+HTTP Request Header
+HTTP Payload
+		   4			 4	  4         16
+	Header MessageLength Flag NumFields MD5 of Fields
+	Field * N
+			   4    4       4   4
+		Header Type Unknown Len Len
+			   N
+		Data(XOR)

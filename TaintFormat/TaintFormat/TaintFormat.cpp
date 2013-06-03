@@ -8,10 +8,11 @@
 #include "rc4test.h"
 #include "mega_d.h"
 #include "zeus.h"
+#include "common.h"
+#include "md5test.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
-static const int    BufLength = 1024;
 
 typedef unsigned char byte;
 
@@ -26,7 +27,8 @@ typedef unsigned char byte;
 const char *Method[] = {
     "rc4",
     "mega-d",
-    "zeus"
+    "zeus",
+    "md5"
 };
 static int Choice = 0;
 
@@ -38,6 +40,8 @@ void ProcessMessage(char *buf, int len)
         MegaDTest(buf, len);
     } else if (Choice == 2) {
         ZeusTest(buf, len);
+    } else if (Choice == 3) {
+        MD5Test(buf, len);
     }
 }
 
@@ -125,9 +129,9 @@ int _tmain(int argc, _TCHAR* argv[])
         return 1;
     }
 
-    char recvbuf[BufLength];
+    char recvbuf[BUF_LEN];
     do {
-        result = recv(connectSocket, recvbuf, BufLength, 0);
+        result = recv(connectSocket, recvbuf, BUF_LEN, 0);
         if (result > 0) {
             ProcessMessage(recvbuf, result);
         } else if (result == 0) {

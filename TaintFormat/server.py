@@ -3,6 +3,8 @@ from datetime import datetime
 import ctypes
 import struct
 from pyDes import *
+import hashlib
+import socket
 
 def rc4crypt(data, key):
     x = 0
@@ -19,7 +21,7 @@ def rc4crypt(data, key):
         box[x], box[y] = box[y], box[x]
         out.append(char ^ box[(box[x] + box[y]) % 256])
     
-    return out
+    return bytes(out)
 
 def zeusEncrypt(data):
 	r = []
@@ -28,15 +30,71 @@ def zeusEncrypt(data):
 		r.append(data[i] ^ r[i-1])
 	return bytes(r)
 	
-def getZeusMessage():
-	pt = b"xHello Zeus!!!!!!"
-	r = zeusEncrypt(pt)
+def getZeusRC4Key():
+	compName = socket.gethostname().upper()
+	m = hashlib.sha1()
+	m.update(compName.encode("ascii"))
+	return m.digest()
+
+def getC2HttpHeader(contentLen):
+	r = "POST /write HTTP/1.1\r\n"
+	r += "Content-Length: %d\r\n" % (contentLen)
+	return bytes(r, "ascii")
+
+def getZeusHeader():
+	r = b"\xA6\xEB\x00\xC2"
+	m = hashlib.sha1()
+	m.update(b"Session #7859")
+	r += m.digest()
+	r += getZeusRC4Key()
+	return r
+
+def getZeusCommandField():
+	r = b"ddos_url http://loccs.sjtu.edu.cn"
+	m = hashlib.md5()
+	m.update(r)
+	r = m.digest() + r
 	print(r)
 	return r
 
+def getZeusHttpPayloadField():
+	data = getZeusCommandField()
+	r = zeusEncrypt(b'\x96' + data)
+	return struct.pack("iiii", 1, 0, len(r), len(r)) + r
+
+def getZeusHttpPayloadHeader(nFields, fields):
+	r = struct.pack("iii", len(fields), 0, nFields)
+	m = hashlib.md5()
+	m.update(fields)
+	r += m.digest()
+	return r
+
+def getZeusHttpPayload():
+	field = getZeusHttpPayloadField()
+	header = getZeusHttpPayloadHeader(1, field)
+	return header + field
+
+def getZeusPayload():
+	payload = getZeusHttpPayload()
+	r = getC2HttpHeader(len(payload))
+	return r + payload
+
+def getZeusMessage():
+	header = getZeusHeader()
+	payload = getZeusPayload()
+	payload = rc4crypt(payload, getZeusRC4Key())
+	r = zeusEncrypt(header + payload)
+	return r
+
+def getMD5Message():
+	r = b"Show Me The Code! Hans Zimmer is God."
+	m = hashlib.md5()
+	m.update(r)
+	return m.digest() + r
+
 def getRC4Message():
 	enc = rc4crypt(b"show me the code", b"gossip")
-	return struct.pack("i", len(enc)) + bytes(enc)
+	return struct.pack("i", len(enc)) + enc
 	
 def getMegaDMessage():
 	data = b"abcdefghijklmnopqrstuvwxyz"
@@ -56,6 +114,8 @@ class MyTcpHandler(socketserver.StreamRequestHandler):
 			return getMegaDMessage()
 		elif method == b"zeus":
 			return getZeusMessage()
+		elif method == b"md5":
+			return getMD5Message()
 		return b"Unknown method"
 		
 
@@ -65,14 +125,23 @@ class MyTcpHandler(socketserver.StreamRequestHandler):
 		print(self.method)
 		self.wfile.write(self.getMessage(self.method))
 
-if __name__ == "__main__":
-	#getMegaDMessage()
-	#print(getZeusMessage())
+def main(argv):
 	ctypes.windll.kernel32.SetConsoleTitleA(b"Server")
 	HOST, PORT = "localhost", 56789
 	server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)
 	print("Running server at {} port {}".format(HOST, PORT))
 	server.serve_forever()
+
+if __name__ == "__main__":
+	#getMegaDMessage()
+	#print(getZeusMessage())
+	
+	#print(rc4crypt(getC2HttpHeader(200), getZeusRC4Key()))
+	#print(getZeusHeader())
+	#
+
+	main(sys.argv)
+	
 	#key = b"secret"
 	#x = rc4crypt(b"hahahehehohohihi", key)
 	#print(bytes(x))

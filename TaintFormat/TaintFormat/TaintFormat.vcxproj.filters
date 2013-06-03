@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="ZeuS_message_format.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -36,6 +37,9 @@
     <ClInclude Include="common.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="md5test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -51,6 +55,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="zeus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="md5test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

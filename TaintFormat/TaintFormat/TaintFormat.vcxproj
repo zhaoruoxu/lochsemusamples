@@ -82,9 +82,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="ZeuS_message_format.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
+    <ClInclude Include="md5test.h" />
     <ClInclude Include="mega_d.h" />
     <ClInclude Include="rc4test.h" />
     <ClInclude Include="stdafx.h" />
@@ -92,6 +94,8 @@
     <ClInclude Include="zeus.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="common.cpp" />
+    <ClCompile Include="md5test.cpp" />
     <ClCompile Include="mega_d.cpp" />
     <ClCompile Include="rc4test.cpp" />
     <ClCompile Include="stdafx.cpp">
