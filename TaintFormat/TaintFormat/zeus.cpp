@@ -80,11 +80,11 @@ __declspec(noinline)
 bool CheckFieldsHash(pbyte fields, ZeusHttpPayloadHeader *header)
 {
     byte md[16];
-    MD5_CTX c;
-    MD5_Init(&c);
-    MD5_Update(&c, fields, header->MsgLen);
-    MD5_Final(md, &c);
-    //MD5(fields, header->MsgLen, md);
+//     MD5_CTX c;
+//     MD5_Init(&c);
+//     MD5_Update(&c, fields, header->MsgLen);
+//     MD5_Final(md, &c);
+    MD5(fields, header->MsgLen, md);
     return CompareByteArray(md, header->Hash, 16) == 0;
 }
 
