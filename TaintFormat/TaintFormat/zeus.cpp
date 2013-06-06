@@ -39,8 +39,10 @@ void GetRC4Key(byte *key)
 void ProcessPayload(char *buf, int len);
 void ProcessHttpPayload(byte *buf, int len);
 void ProcessHttpPayloadFields(byte *buf, int len);
-
+void ProcessC2Message(byte *buf, int len);
 void ProcessCommandField(byte *buf, int len);
+
+byte g_sessionId[20], g_sourceId[20];
 
 void ZeusTest( char *buf, int len )
 {
@@ -48,30 +50,81 @@ void ZeusTest( char *buf, int len )
     ZeusDecrypt(buf, dec, len);
 
     ZeusHeader *header = (ZeusHeader *) dec;
+    memcpy(g_sessionId, header->SessionID, sizeof(g_sessionId));
+    memcpy(g_sourceId, header->SourceID, sizeof(g_sourceId));
 
     printf("Message type: %02x\n", header->Type);
 
+    if (header->Type == 0xcc) {
+        ProcessC2Message((byte *) dec + sizeof(ZeusHeader), len - sizeof(ZeusHeader));
+    } else {
+        printf("Unknown message type\n");
+    }
+}
+
+
+void ProcessC2Message( byte *buf, int len )
+{
     byte rc4key[20];
     ZeroMemory(rc4key, 20);
     GetRC4Key(rc4key);
 
     char payload[BUF_LEN];
     ZeroMemory(payload, BUF_LEN);
-    RC4Crypt(payload, dec + sizeof(ZeusHeader), len - sizeof(ZeusHeader), 
-        (const char *) rc4key, 20);
+    RC4Crypt(payload, (const char *) buf, len, (const char *) rc4key, 20);
 
-    printf("Payload:\n%s\n", payload);
+    //printf("Payload:\n%s\n", payload);
     ProcessPayload(payload, len - sizeof(ZeusHeader));
+}
+
+int g_xid;
+__declspec(noinline)
+void ProcessXID(const char *xidField)
+{
+    char buf[64];
+    g_xid = atoi(xidField + 6);
+    printf("xid = %d\n", g_xid);
+}
+
+__declspec(noinline)
+bool ProcessHttpHeaderField(const char *field)
+{
+    if (StrPrefix(field, "X-ID")) {
+        ProcessXID(field);
+        return true;
+    }
+    return false;
 }
 
 __declspec(noinline) 
 void ProcessPayload( char *buf, int len )
 {
-    char *data = buf;
-    while (true) {
-        char *sub = MyStrStr(data, "\r\n");
-        if (sub == NULL) break;
-        data = sub + 2;
+//     char *data = buf;
+// 
+//     int i = 0;
+//     while (i < len - 1) {
+//         if (buf[i] == '\r' && buf[i+1] == '\n') {
+//             buf[i] = 0;
+//             if (ProcessHttpHeaderField(data)) {
+//                 data = buf + i + 2;
+//                 break;
+//             }
+//             i += 2;
+//             data = buf + i;
+//         } else {
+//             i++;
+//         }
+//     }
+
+    char *data = strtok(buf, "\r\n");
+    while (data != NULL) {
+        if (StrPrefix(data, "X-ID")) {
+            ProcessXID(data);
+            data = strtok(NULL, "\r\n");
+            //ProcessHttpPayload((byte *) data, len - (data - buf));
+            break;
+        }
+        data = strtok(NULL, "\r\n");
     }
     ProcessHttpPayload((byte *) data, len - (data - buf));
 }
@@ -122,6 +175,12 @@ void ProcessHttpPayloadFields( byte *buf, int len )
 }
 
 __declspec(noinline)
+void DDosUrl(const char *url)
+{
+    printf("DDOS URL: %s\n", url);
+}
+
+__declspec(noinline)
 void ProcessCommandField( byte *buf, int len )
 {
     byte *md5hash = buf;
@@ -134,5 +193,12 @@ void ProcessCommandField( byte *buf, int len )
         printf("hash match\n");
     }
 
-    printf("cmd = %s\n", cmd);
+    //printf("cmd = %s\n", cmd);
+
+    char *p = strtok(cmd, " ");
+    if (strcmp(p, "ddos_url") == 0) {
+        DDosUrl(p + strlen(p) + 1);
+    } else {
+        printf("Unknown command\n");
+    }
 }

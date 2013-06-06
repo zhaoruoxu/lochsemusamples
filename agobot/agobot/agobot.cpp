@@ -3,7 +3,7 @@
 #include "agobot.h"
 
 const char *Host = "localhost";
-const char *Channel = "#agochan";
+const char *Channel = "#Agonet";
 const char *Nick = "moxiao";
 const char *User = "mxuser";
 const char *Real = "mxreal";
@@ -83,16 +83,21 @@ void Msg_315()
     g_running = false;
 }
 
+__declspec(noinline)
+void ProcessMember(const char *name)
+{
+    printf("Member: %s\n", name);
+}
+
 void Msg_353()
 {
     strp nick = NextToken(" ");
     strp chanMode = NextToken(" ");
     strp chan = NextToken(" ");
 
-    printf("Channel members: ");
     strp member = FirstToken(NextToken(":"), " ");
     while (member) {
-        printf("%s  ", member);
+        ProcessMember(member);
         member = NextToken(" ");
     }
     printf("\n");

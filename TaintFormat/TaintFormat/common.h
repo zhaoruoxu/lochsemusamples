@@ -15,5 +15,6 @@ char * __cdecl MyStrStr (
     );
 
 int CompareByteArray( cpbyte l, cpbyte r, int n );
+bool StrPrefix(const char *str, const char *prefix);
 
 #endif // __TAINTFORMAT_COMMON_H__

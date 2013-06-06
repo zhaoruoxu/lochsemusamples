@@ -38,3 +38,9 @@ char * __cdecl MyStrStr (
     return(NULL);
 
 }
+
+bool StrPrefix( const char *str, const char *prefix )
+{
+    if (strlen(str) < strlen(prefix)) return false;
+    return strncmp(str, prefix, strlen(prefix)) == 0;
+}
