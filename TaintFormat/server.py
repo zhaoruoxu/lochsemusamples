@@ -39,7 +39,7 @@ def getZeusRC4Key():
 def getC2HttpHeader(contentLen):
 	r = "POST /write HTTP/1.1\r\n"
 	r += "Content-Length: %d\r\n" % (contentLen)
-	r += "Accpet-Encoding:\r\nConnection: close\r\nX-ID: 100\r\n"
+	r += "Accpet-Encoding:\r\nConnection: close\r\nX-ID: 96730\r\n"
 	return bytes(r, "ascii")
 
 def getZeusHeader():
