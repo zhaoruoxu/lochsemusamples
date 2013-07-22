@@ -1,0 +1,1 @@
+@bircd signal rehash

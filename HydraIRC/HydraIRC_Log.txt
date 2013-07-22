@@ -1,0 +1,3 @@
+Mon Jul 22 16:56:49 2013 - INFO - *** HydraIRC v0.3.165 (12/December/2008) Started ***
+Mon Jul 22 16:56:49 2013 - INFO - Richedit Version 5.31.23.1230
+Mon Jul 22 17:17:08 2013 - INFO - *** HydraIRC v0.3.165 (12/December/2008) Stopped ***
