@@ -149,6 +149,7 @@
     <item name="Item_infobackground" color="#f7f3e9"/>
   </colors>
   <misc>
+    <pref name="Audio Mute" boolean="true"/>
     <pref name="Log File Viewer" string="notepad.exe"/>
     <pref name="Channel Bookmark 1" string="#hydrairc"/>
   </misc>
@@ -195,8 +196,8 @@
     <network name="moxiao" id="1" flags="2"/>
   </networklist>
   <serverlist>
-    <server name="localhost" description="localhost" port="6667" network="10004" flags="2"/>
     <server name="localhost" description="localhost" port="6667" network="1" flags="2"/>
+    <server name="moxiao.mooo.com" description="moxiao.mooo.com" port="6667" network="1" flags="2"/>
   </serverlist>
   <ignores/>
   <windowprefs/>

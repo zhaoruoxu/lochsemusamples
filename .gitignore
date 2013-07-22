@@ -31,3 +31,5 @@ _ReSharper*/
 bewareircd/stdout.txt
 HydraIRC/HydraIRC_Log.txt
 HydraIRC/Profile_Default.xml
+
+HydraIRC/logs/*.*
