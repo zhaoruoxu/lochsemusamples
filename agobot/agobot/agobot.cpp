@@ -4,7 +4,7 @@
 
 const char *Host = "localhost";
 const char *Channel = "#Agonet";
-const char *Nick = "moxiao";
+const char *Nick = "bot_00000001";
 const char *User = "mxuser";
 const char *Real = "mxreal";
 
@@ -27,21 +27,31 @@ inline strp NextToken(strp delim)
     return strtok(NULL, delim);
 }
 
-void Msg_315();
-void Msg_353();
-void Msg_366();
-void Msg_324();
-void Msg_352();
+void Msg_315(strp p);
+void Msg_353(strp p);
+void Msg_366(strp p);
+void Msg_324(strp p);
+void Msg_352(strp p);
+void Msg_376(strp p);
+
+void Ping_Handler(strp p);
 
 struct CmdHandler {
     strp cmd;
-    void (*handler)();
-} g_handlers[] = {
+    void (*handler)(strp p);
+};
+
+CmdHandler g_handlers1[] = {
+    { "PING", Ping_Handler }
+};
+
+CmdHandler g_handlers2[] = {
     { "353", Msg_353 },
     { "315", Msg_315 },
     { "366", Msg_366 },
     { "324", Msg_324 },
     { "352", Msg_352 },
+    { "376", Msg_376 },
 };
 
 void RunAgobot()
@@ -52,9 +62,9 @@ void RunAgobot()
     }
 
     SendIrcFormat("NICK %s", Nick);
-    SendIrcFormat("USER %s %s bla :%s", User, Host, Real);
+    SendIrcFormat("USER %s 0 * :%s", User, Host, Real);
 
-    SendIrcFormat("JOIN %s", Channel);
+    //
 
     char buf[4096];
 
@@ -65,11 +75,17 @@ void RunAgobot()
         printf("-> %s\n", buf);
 
         char *p = FirstToken(buf, " ");
-        p = NextToken(" ");
+        char *q = NextToken(" ");
 
-        for (int i = 0; i < _countof(g_handlers); i++) {
-            if (!strcmp(p, g_handlers[i].cmd)) {
-                g_handlers[i].handler();
+        for (int i = 0; i < _countof(g_handlers1); i++) {
+            if (!strcmp(p, g_handlers1[i].cmd)) {
+                g_handlers1[i].handler(q);
+            }
+        }
+
+        for (int i = 0; i < _countof(g_handlers2); i++) {
+            if (!strcmp(q, g_handlers2[i].cmd)) {
+                g_handlers2[i].handler(q);
             }
         }
     }
@@ -77,7 +93,14 @@ void RunAgobot()
     CloseConnection();
 }
 
-void Msg_315()
+void Ping_Handler(strp p)
+{
+    char buf[128];
+    sprintf(buf, "PONG %s", p);
+    SendIrcFormat(buf);
+}
+
+void Msg_315(strp p)
 {
     SendIrcFormat("QUIT :Leaving");
     g_running = false;
@@ -89,7 +112,7 @@ void ProcessMember(const char *name)
     printf("Member: %s\n", name);
 }
 
-void Msg_353()
+void Msg_353(strp p)
 {
     strp nick = NextToken(" ");
     strp chanMode = NextToken(" ");
@@ -103,17 +126,17 @@ void Msg_353()
     printf("\n");
 }
 
-void Msg_366()
+void Msg_366(strp p)
 {
     SendIrcFormat("MODE %s", Channel);
 }
 
-void Msg_324()
+void Msg_324(strp p)
 {
     SendIrcFormat("WHO %s", Channel);
 }
 
-void Msg_352()
+void Msg_352(strp p)
 {
     strp mynick = NextToken(" ");
     strp chan = NextToken(" ");
@@ -128,4 +151,9 @@ void Msg_352()
 
     printf("Chan=%s, User=%s, Host=%s, Server=%s, Nick=%s, Hop=%s, Real=%s\n",
         chan, user, host, server, nick, hopcount, realname);
+}
+
+void Msg_376(strp p)
+{
+    SendIrcFormat("JOIN %s", Channel);
 }

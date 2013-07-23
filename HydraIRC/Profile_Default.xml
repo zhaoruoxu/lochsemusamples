@@ -149,7 +149,6 @@
     <item name="Item_infobackground" color="#f7f3e9"/>
   </colors>
   <misc>
-    <pref name="Audio Mute" boolean="true"/>
     <pref name="Log File Viewer" string="notepad.exe"/>
     <pref name="Channel Bookmark 1" string="#hydrairc"/>
   </misc>
