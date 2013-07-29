@@ -36,21 +36,48 @@ const char *Method[] = {
 };
 static int Choice = 0;
 
-void ProcessMessage(char *buf, int len)
+void ProcessMessage(int ch, char *buf, int len)
 {
-    if (Choice == 0) {
+    if (ch == 0) {
         RC4Test(buf, len);
-    } else if (Choice == 1) {
+    } else if (ch == 1) {
         MegaDTest(buf, len);
-    } else if (Choice == 2) {
+    } else if (ch == 2) {
         ZeusTest(buf, len);
-    } else if (Choice == 3) {
+    } else if (ch == 3) {
         MD5Test(buf, len);
-    } else if (Choice == 4) {
+    } else if (ch == 4) {
         Base64Test(buf, len);
-    } else if (Choice == 5) {
+    } else if (ch == 5) {
         StormTest(buf, len);
     }
+}
+
+bool Work(int choice, SOCKET sock)
+{
+    printf("\n----------  Running %d:%s  ----------\n\n", choice, Method[choice]);
+
+    char recvbuf[BUF_LEN];
+    int result = send(sock, Method[choice], strlen(Method[choice]), 0);
+    if (result == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(sock);
+        WSACleanup();
+        return false;
+    }
+    //do {
+        result = recv(sock, recvbuf, BUF_LEN, 0);
+        if (result > 0) {
+            ProcessMessage(choice, recvbuf, result);
+            //break;
+        } else if (result == 0) {
+            //break;
+        } else {
+            printf("recv failed with error: %d\n", WSAGetLastError());
+            return false;
+        }
+    //} while (result > 0);
+    return true;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -119,34 +146,14 @@ int _tmain(int argc, _TCHAR* argv[])
         return 1;
     }
 
-    const char *buf = Method[Choice];
-
-    result = send(connectSocket, buf, strlen(buf), 0);
-    if (result == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(connectSocket);
-        WSACleanup();
-        return 1;
-    }
-
-    result = shutdown(connectSocket, SD_SEND);
-    if (result == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(connectSocket);
-        WSACleanup();
-        return 1;
-    }
-
     char recvbuf[BUF_LEN];
-    do {
-        result = recv(connectSocket, recvbuf, BUF_LEN, 0);
-        if (result > 0) {
-            ProcessMessage(recvbuf, result);
-        } else if (result == 0) {
-        } else {
-            printf("recv failed with error: %d\n", WSAGetLastError());
+    if (Choice == 0) {
+        for (int i = 0; i < _countof(Method); i++) {
+            if (!Work(i, connectSocket)) break;
         }
-    } while (result > 0);
+    } else {
+        Work(Choice, connectSocket);
+    }
 
     closesocket(connectSocket);
     WSACleanup();

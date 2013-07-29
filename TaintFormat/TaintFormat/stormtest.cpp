@@ -16,6 +16,7 @@ void StormDecrypt(const char *buf, int len, byte *decbuf, int *declen)
     }
 }
 
+__declspec(noinline) 
 byte ChecksumXor(byte *buf, int len)
 {
     byte r = 0;
@@ -24,12 +25,13 @@ byte ChecksumXor(byte *buf, int len)
     return r;
 }
 
+__declspec(noinline) 
 byte ChecksumAdd(byte *buf, int len)
 {
-    byte r = 0;
+    int r = 0;
     for (int i = 0; i < len; i++)
-        r += buf[i];
-    return r;
+        r = (r + buf[i]) % 256;
+    return (byte) r;
 }
 
 void StormTest( char *buf, int len )

@@ -145,34 +145,51 @@ def stormEncrypt(pt):
     print(r)
     return bytes(r)
 
-class MyTcpHandler(socketserver.StreamRequestHandler):
-    def getMessage(self, method):
-        if method == b"rc4":
-            return getRC4Message()
-        elif method == b"mega-d":
-            return getMegaDMessage()
-        elif method == b"zeus":
-            return getZeusMessage()
-        elif method == b"md5":
-            return getMD5Message()
-        elif method == b"base64":
-            return getBase64Message()
-        elif method == b"storm":
-            return getStormMessage()
-        return b"Unknown method"
-        
-    def handle(self):
-        self.method = self.rfile.readline().strip()
-        print("{} {} wrote:".format(datetime.now(), self.client_address[0]))
-        print(self.method)
-        self.wfile.write(self.getMessage(self.method))
+def getMessage(method):
+    if method == b"rc4":
+        return getRC4Message()
+    elif method == b"mega-d":
+        return getMegaDMessage()
+    elif method == b"zeus":
+        return getZeusMessage()
+    elif method == b"md5":
+        return getMD5Message()
+    elif method == b"base64":
+        return getBase64Message()
+    elif method == b"storm":
+        return getStormMessage()
+    return b"Unknown method"
 
 def main(argv):
     ctypes.windll.kernel32.SetConsoleTitleA(b"Server")
+
     HOST, PORT = "localhost", 56789
-    server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)
+
     print("Running server at {} port {}".format(HOST, PORT))
-    server.serve_forever()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT))
+    s.listen(5)
+    while True:
+        print("Waiting for connection...")
+        sock, addr = s.accept()
+        print("Connection from ", addr)
+        
+        #try:
+        while True:
+            data = sock.recv(1024)
+            print("{} {} wrote:".format(datetime.now(), addr), data)
+            if not data:
+                break
+            sock.send(getMessage(data))
+        sock.close()
+        #except:
+        #    print("exception:", sys.exc_info()[0])
+        #    sock.close()
+    
+    #server = socketserver.TCPServer((HOST, PORT), MyTcpHandler)
+    #
+    #server.serve_forever()
+
 
 if __name__ == "__main__":
     #getMegaDMessage()
