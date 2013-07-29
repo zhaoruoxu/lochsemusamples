@@ -1,0 +1,6 @@
+[2013-07-23 13:29:04] *** bot_b9834f75 (HydraIRC@agonet.net) joined
+[2013-07-23 13:29:04] *** bot_7e23da13 (HydraIRC@agonet.net) joined
+[2013-07-23 13:29:04] *** bot_272c3805 (HydraIRC@agonet.net) joined
+[2013-07-23 13:29:09] *** bot_7e23da13 quit (Read error: Connection reset by peer)
+[2013-07-23 13:29:09] *** bot_b9834f75 quit (Read error: Connection reset by peer)
+[2013-07-23 13:29:09] *** bot_272c3805 quit (Read error: Connection reset by peer)

@@ -1,2 +1,2 @@
-Tuesday July 23 2013 -- 11:21:25 +08:00
+Tuesday July 23 2013 -- 15:25:37 +08:00
    server started successfully

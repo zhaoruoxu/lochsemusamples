@@ -44,23 +44,23 @@
     </group>
   </buddygroups>
   <fonts>
-    <font description="Server Input" name="Verdana" size="9"/>
-    <font description="Server Output" name="Verdana" size="9"/>
-    <font description="Channel Input" name="Verdana" size="9"/>
-    <font description="Channel Output" name="Verdana" size="9"/>
-    <font description="Output Window" name="Verdana" size="9"/>
-    <font description="Channel Monitor" name="Verdana" size="9"/>
-    <font description="Server Monitor" name="Verdana" size="9"/>
-    <font description="DCCChat Input" name="Verdana" size="9"/>
-    <font description="DCCChat Output" name="Verdana" size="9"/>
-    <font description="Query Input" name="Verdana" size="9"/>
-    <font description="Query Output" name="Verdana" size="9"/>
-    <font description="Server List" name="Verdana" size="9"/>
-    <font description="Server List Dirty" name="Verdana" size="9" underline="true"/>
-    <font description="Server List Recent" name="Verdana" size="9" underline="true"/>
-    <font description="User List" name="Verdana" size="9"/>
-    <font description="Header" name="Verdana" size="9"/>
-    <font description="Info" name="Verdana" size="8"/>
+    <font description="Server Input" name="Segoe UI" size="9"/>
+    <font description="Server Output" name="Segoe UI" size="9"/>
+    <font description="Channel Input" name="Segoe UI" size="9"/>
+    <font description="Channel Output" name="Segoe UI" size="9"/>
+    <font description="Output Window" name="Segoe UI" size="9"/>
+    <font description="Channel Monitor" name="Segoe UI" size="9"/>
+    <font description="Server Monitor" name="Segoe UI" size="9"/>
+    <font description="DCCChat Input" name="Segoe UI" size="9"/>
+    <font description="DCCChat Output" name="Segoe UI" size="9"/>
+    <font description="Query Input" name="Segoe UI" size="9"/>
+    <font description="Query Output" name="Segoe UI" size="9"/>
+    <font description="Server List" name="Segoe UI" size="9"/>
+    <font description="Server List Dirty" name="Segoe UI" size="9" underline="true"/>
+    <font description="Server List Recent" name="Segoe UI" size="9" underline="true"/>
+    <font description="User List" name="Segoe UI" size="9"/>
+    <font description="Header" name="Segoe UI" size="9"/>
+    <font description="Info" name="Segoe UI" size="8"/>
   </fonts>
   <colors>
     <item name="Color_white" color="#ffffff"/>
@@ -190,6 +190,7 @@
     <group name="Magazines" id="24584">
       <favorite data="#atomicmpc" name="#atomicmpc on AustNet" servername="irc.austnet.org" type="C" networkid="10023" port="6667" id="24585"/>
     </group>
+    <favorite data="#Agonet" name="#Agonet on moxiao (23/07/13)" servername="localhost" type="C" networkid="1" port="6667" id="24586"/>
   </favorites>
   <networklist>
     <network name="moxiao" id="1" flags="2"/>

@@ -24,18 +24,20 @@ class Agobot(irc.bot.SingleServerIRCBot):
         
     def on_pubmsg(self, c, e):
         a = e.arguments[0].split(":", 1)
-        if len(a) > 1 and irc.strings.lower(a[0]) == irc.strings.lower(self.connection.get_nickname()):
+        if len(a) > 1 and (a[0] == "" or a[0].lower() == self.connection.get_nickname().lower()):
             self.do_command(e, a[1].strip())
         
     def do_command(self, e, cmd):
         nick = e.source.nick
         c = self.connection
-        print("command from", nick, ":", cmd)
+        print("{0}: command from {1}: {2}".format(self.connection.get_nickname(), nick, cmd))
         
         if cmd == "disconnect":
             self.disconnect()
         elif cmd == "die":
             self.die()
+        elif cmd == "hi":
+            c.notice(nick, "Hi")
         elif cmd == "stats":
             for chname, chobj in self.channels.items():
                 c.notice(nick, "--- Channel statistics ---")
@@ -60,3 +62,12 @@ class AgobotThread(threading.Thread):
     def run(self):
         print("Running bot", self.bot.nick)
         self.bot.start()
+
+
+
+
+
+
+
+
+

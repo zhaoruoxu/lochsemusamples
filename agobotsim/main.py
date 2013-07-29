@@ -25,16 +25,18 @@ The known commands are:
     dcc -- Let the bot invite you to a DCC CHAT connection.
 """
 
-import irc.bot
-import irc.strings
-from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
-from agobot import *
+import irc.logging
+from agobot import AgobotThread
 import time
+import argparse
 
 def main():
-    #bot = TestBot(channel, nickname, server, port)
-    #bot.start()
-    bots = [AgobotThread("localhost") for i in range(10)]
+    parser = argparse.ArgumentParser(description="Agobot Simulator")
+    irc.logging.add_arguments(parser)
+    args = parser.parse_args()
+    irc.logging.setup(args)
+    
+    bots = [AgobotThread("localhost") for i in range(32)]
     for bot in bots:
         bot.start()
         time.sleep(0.1)
