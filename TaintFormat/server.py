@@ -5,6 +5,8 @@ import struct
 from pyDes import *
 import hashlib
 import socket
+import base64
+import functools
 
 def rc4crypt(data, key):
     x = 0
@@ -108,6 +110,41 @@ def getMegaDMessage():
     print(len(d))
     return struct.pack(">H", len(d) // 8) + d
     
+def getBase64Message():
+    s = b"Prophet rocks!"
+    return struct.pack("i", len(s)) + base64.b64encode(s)
+
+def getStormMessage():
+    s = b"Prophet rocks!"
+    b_xor, b_add = 0, 0
+    for x in s:
+        b_xor ^= x
+        b_add = (b_add + x) % 256
+    print(b_xor, b_add)
+    b_cnt = 0x67
+    r = stormEncrypt(struct.pack("BBB", b_xor, b_add, b_cnt) + s)
+    print(r)
+    return r
+    #r = stormEncrypt(b'\x01\x02\x03')
+    
+    #print(r)
+    #return r
+
+def stormEncrypt(pt):
+    padded = pt[:]
+    if len(pt) % 3 == 1:
+        padded += b'\0\0'
+    elif len(pt) % 3 == 2:
+        padded += b'\0'
+    r = []
+    for i in range(len(padded) // 3):
+        r.append((padded[i*3] >> 2) + 0x21)
+        r.append(((padded[i*3] & 0x3) << 4) + (padded[i*3+1] >> 4) + 0x21)
+        r.append(((padded[i*3+1] & 0xf) << 2) + (padded[i*3+2] >> 6) + 0x21)
+        r.append((padded[i*3+2] & 0x3f) + 0x21)
+    print(r)
+    return bytes(r)
+
 class MyTcpHandler(socketserver.StreamRequestHandler):
     def getMessage(self, method):
         if method == b"rc4":
@@ -118,9 +155,12 @@ class MyTcpHandler(socketserver.StreamRequestHandler):
             return getZeusMessage()
         elif method == b"md5":
             return getMD5Message()
+        elif method == b"base64":
+            return getBase64Message()
+        elif method == b"storm":
+            return getStormMessage()
         return b"Unknown method"
         
-
     def handle(self):
         self.method = self.rfile.readline().strip()
         print("{} {} wrote:".format(datetime.now(), self.client_address[0]))
@@ -142,6 +182,7 @@ if __name__ == "__main__":
     #print(getZeusHeader())
     #
 
+    #print(getStormMessage())
     main(sys.argv)
     
     #key = b"secret"

@@ -10,6 +10,8 @@
 #include "zeus.h"
 #include "common.h"
 #include "md5test.h"
+#include "base64test.h"
+#include "stormtest.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
@@ -28,7 +30,9 @@ const char *Method[] = {
     "rc4",
     "mega-d",
     "zeus",
-    "md5"
+    "md5",
+    "base64",
+    "storm"
 };
 static int Choice = 0;
 
@@ -42,6 +46,10 @@ void ProcessMessage(char *buf, int len)
         ZeusTest(buf, len);
     } else if (Choice == 3) {
         MD5Test(buf, len);
+    } else if (Choice == 4) {
+        Base64Test(buf, len);
+    } else if (Choice == 5) {
+        StormTest(buf, len);
     }
 }
 
