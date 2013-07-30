@@ -12,6 +12,7 @@
 #include "md5test.h"
 #include "base64test.h"
 #include "stormtest.h"
+#include "zeroaccess.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
@@ -32,7 +33,8 @@ const char *Method[] = {
     "zeus",
     "md5",
     "base64",
-    "storm"
+    "storm",
+    "zeroaccess"
 };
 static int Choice = 0;
 
@@ -50,6 +52,8 @@ void ProcessMessage(int ch, char *buf, int len)
         Base64Test(buf, len);
     } else if (ch == 5) {
         StormTest(buf, len);
+    } else if (ch == 6) {
+        ZeroAccessTest(buf, len);
     }
 }
 
@@ -93,6 +97,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     if (argc == 1) {
         printf("Need argument\n");
+        ZeroAccessTest(NULL, 0);
         return 0;
     }
 

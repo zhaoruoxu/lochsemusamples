@@ -145,6 +145,9 @@ def stormEncrypt(pt):
     print(r)
     return bytes(r)
 
+def getZeroAccessMessage():
+    return b'\xd6\xf9\xe4\x02\x08\x9a\x95\x9b\x1a\x4a\x65\x29\x4d\x9b\x39\xc1\x6b\x7d\xb6\x4c'
+
 def getMessage(method):
     if method == b"rc4":
         return getRC4Message()
@@ -158,6 +161,8 @@ def getMessage(method):
         return getBase64Message()
     elif method == b"storm":
         return getStormMessage()
+    elif method == b"zeroaccess":
+        return getZeroAccessMessage()
     return b"Unknown method"
 
 def main(argv):

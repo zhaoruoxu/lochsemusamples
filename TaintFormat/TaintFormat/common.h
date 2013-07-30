@@ -16,5 +16,7 @@ char * __cdecl MyStrStr (
 
 int CompareByteArray( cpbyte l, cpbyte r, int n );
 bool StrPrefix(const char *str, const char *prefix);
+unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf, size_t bufLen );
+
 
 #endif // __TAINTFORMAT_COMMON_H__
