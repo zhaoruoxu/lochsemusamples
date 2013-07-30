@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "stormtest.h"
 
+/*
+ * Storm botnet in storm-base64-rubot-thesis.pdf
+ * simulate Storm 'search reply' message
+ * 
+ *
+ */
 
 void StormDecrypt(const char *buf, int len, byte *decbuf, int *declen)
 {

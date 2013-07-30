@@ -115,7 +115,7 @@ def getBase64Message():
     return struct.pack("i", len(s)) + base64.b64encode(s)
 
 def getStormMessage():
-    s = b"Prophet rocks!"
+    s = b"http://us.blizzard.com/en-us/"
     b_xor, b_add = 0, 0
     for x in s:
         b_xor ^= x
