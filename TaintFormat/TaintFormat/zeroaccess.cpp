@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-void crypt(const char * in, char * out, int len)
+void ZA_crypt(const char * in, char * out, int len)
 {
     // The following implements the encryption/decryption function for ZeroAccess.
     // I'm not sure what encryption algorithm this is. The table below is used to generate a stream of
@@ -59,7 +59,7 @@ void crypt(const char * in, char * out, int len)
     }
 }
 
-void GenerateServerInput()
+void ZA_GenerateServerInput()
 {
     ZAPacket pkt = {0};
     pkt.Magic = 0xfe4367cd;
@@ -71,7 +71,7 @@ void GenerateServerInput()
     pkt.CRC = Crc32_ComputeBuf(0, (const void *) &pkt, sizeof(pkt));
 
     ZAPacket cryptPkt = {0};
-    crypt((char *) &pkt, (char *) &cryptPkt, sizeof(ZAPacket));
+    ZA_crypt((char *) &pkt, (char *) &cryptPkt, sizeof(ZAPacket));
 
     for (int i = 0; i < sizeof(ZAPacket); i++) {
         printf("\\x%02x", reinterpret_cast<unsigned char *>(&cryptPkt)[i]);
@@ -87,7 +87,7 @@ void getF(ZAPacket *pkt)
 void ZeroAccessTest( char *buf, int len )
 {
     if (buf == NULL) {
-        GenerateServerInput();
+        ZA_GenerateServerInput();
         return;
     }
 
@@ -99,7 +99,7 @@ void ZeroAccessTest( char *buf, int len )
     ZAPacket *cryptPkt = (ZAPacket *) buf;
 
     ZAPacket pkt = {0};
-    crypt((const char *) cryptPkt, (char *) &pkt, sizeof(ZAPacket));
+    ZA_crypt((const char *) cryptPkt, (char *) &pkt, sizeof(ZAPacket));
 
     printf("Magic is %08x\n", pkt.Magic);
     unsigned int crc = pkt.CRC;

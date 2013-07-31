@@ -13,6 +13,8 @@
 #include "base64test.h"
 #include "stormtest.h"
 #include "zeroaccess.h"
+#include "festi.h"
+#include "mariposa.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
@@ -34,7 +36,9 @@ const char *Method[] = {
     "md5",
     "base64",
     "storm",
-    "zeroaccess"
+    "zeroaccess",
+    "festi",
+    "mariposa"
 };
 static int Choice = 0;
 
@@ -54,6 +58,10 @@ void ProcessMessage(int ch, char *buf, int len)
         StormTest(buf, len);
     } else if (ch == 6) {
         ZeroAccessTest(buf, len);
+    } else if (ch == 7) {
+        FestiTest(buf, len);
+    } else if (ch == 8) {
+        MariposaTest(buf, len);
     }
 }
 
@@ -96,8 +104,12 @@ int _tmain(int argc, _TCHAR* argv[])
 #endif
 
     if (argc == 1) {
-        printf("Need argument\n");
+        printf("ZeroAccess:\n");
         ZeroAccessTest(NULL, 0);
+        printf("\n\nFesti:\n");
+        FestiTest(NULL, 0);
+        printf("\n\nMariposa:\n");
+        MariposaTest(NULL, 0);
         return 0;
     }
 

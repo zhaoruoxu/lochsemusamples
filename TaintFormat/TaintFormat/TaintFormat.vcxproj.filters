@@ -49,6 +49,12 @@
     <ClInclude Include="zeroaccess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="festi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mariposa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -79,6 +85,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="zeroaccess.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="festi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mariposa.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
