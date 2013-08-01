@@ -98,3 +98,10 @@ bool StrPrefix( const char *str, const char *prefix )
     if (strlen(str) < strlen(prefix)) return false;
     return strncmp(str, prefix, strlen(prefix)) == 0;
 }
+
+void PrintHexString( cpbyte dat, int len )
+{
+    for (int i = 0; i < len; i++)
+        printf("\\x%02x", dat[i]);
+    printf("\n");
+}

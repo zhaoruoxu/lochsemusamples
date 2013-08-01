@@ -17,6 +17,6 @@ char * __cdecl MyStrStr (
 int CompareByteArray( cpbyte l, cpbyte r, int n );
 bool StrPrefix(const char *str, const char *prefix);
 unsigned long Crc32_ComputeBuf( unsigned long inCrc32, const void *buf, size_t bufLen );
-
+void PrintHexString(cpbyte dat, int len);
 
 #endif // __TAINTFORMAT_COMMON_H__

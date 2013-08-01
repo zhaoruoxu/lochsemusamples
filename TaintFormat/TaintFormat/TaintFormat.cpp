@@ -15,6 +15,7 @@
 #include "zeroaccess.h"
 #include "festi.h"
 #include "mariposa.h"
+#include "des_modes_test.h"
 
 static const char * Port = "56789";
 static const char * ServerAddress = "localhost";
@@ -38,7 +39,9 @@ const char *Method[] = {
     "storm",
     "zeroaccess",
     "festi",
-    "mariposa"
+    "mariposa",
+    "des-cbc",
+    "des-cfb"
 };
 static int Choice = 0;
 
@@ -62,6 +65,10 @@ void ProcessMessage(int ch, char *buf, int len)
         FestiTest(buf, len);
     } else if (ch == 8) {
         MariposaTest(buf, len);
+    } else if (ch == 9) {
+        DesCBCTest(buf, len);
+    } else if (ch == 10) {
+        DesCFBTest(buf, len);
     }
 }
 
@@ -106,10 +113,18 @@ int _tmain(int argc, _TCHAR* argv[])
     if (argc == 1) {
         printf("ZeroAccess:\n");
         ZeroAccessTest(NULL, 0);
+
         printf("\n\nFesti:\n");
         FestiTest(NULL, 0);
+
         printf("\n\nMariposa:\n");
         MariposaTest(NULL, 0);
+
+        printf("\n\nDES CBC:\n");
+        DesCBCTest(NULL, 0);
+
+        printf("\n\nDES CFB:\n");
+        DesCFBTest(NULL, 0);
         return 0;
     }
 
