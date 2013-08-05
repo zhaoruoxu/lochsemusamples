@@ -14,7 +14,7 @@ void Festi_crypt(const byte *in, byte *out, int len)
 void Festi_GenerateServerInput()
 {
     char in[256], out[256];
-    const char *s = "Prophet rocks! Prophet rocks! Prophet rocks! Bye cruel world!";
+    const char *s = "In religion, a prophet is an individual who is claimed to have been contacted by the supernatural or the divine.";
     in[0] = 0xe2; in[1] = 0x36;
     strcpy(in + 2, s);
     in[3+strlen(s)] = 0xab;
