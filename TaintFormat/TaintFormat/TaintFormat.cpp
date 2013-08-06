@@ -184,6 +184,7 @@ int _tmain(int argc, _TCHAR* argv[])
             if (!Work(i, connectSocket)) break;
         }
     } else {
+        if (Choice == -1) Choice = 0;
         Work(Choice, connectSocket);
     }
 
